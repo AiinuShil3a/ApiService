@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Restaurant = require("../models/restaurant.model.js");
+const Restaurant = require("../models/restaurant.model-sql.js");
 
 //Insert restaurant to DB MySQL
 router.post("/RestaurantsMenu" , (req,res) => {
