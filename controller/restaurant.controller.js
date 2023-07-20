@@ -11,23 +11,56 @@ Restaurant.createRestaurant = async(newRestaurant)=>{
     }
 }
 
-Restaurant.updateRestaurant = async(newRestaurant)=>{
-    const restaurantId = Number.parseInt(req.params.id);
-    Restaurant.getById(restaurantId,(err, data)=>{
-        try {
-            const { name, type, Img } = newRestaurant;
-            const query = `
-              UPDATE restaurants
-              SET name = '${name}', type = '${type}', Img = '${Img}'
-              WHERE id = ${restaurantId};
-            `;
-            return query.toJSON();
-        } catch (error) {
-            console.log("err",err);
-            throw err;
-        }
-    })
-}
+Restaurant.updateRestaurant = async (restaurantId, newRestaurant) => {
+  try {
+    const updatedRestaurant = await Restaurant.update(
+      newRestaurant,
+      { where: { id: restaurantId } }
+    );
+    return updatedRestaurant;
+  } catch (error) {
+    console.log("err", error);
+    throw error;
+  }
+};
+
+
+Restaurant.getAll = async() => {
+  console.log("HelloPass1");
+  try {
+    const restaurants = await Restaurant.findAll();
+    console.log("ShowAll restaurant");
+    return restaurants
+  } catch (error) {
+      console.log("err", error);
+      throw error;
+  }
+};
+
+Restaurant.getOne = async (restaurantId) => {
+  try {
+    const searchByID = await Restaurant.findOne(
+      { where: { id: restaurantId } }
+    );
+    return searchByID;
+  } catch (error) {
+    console.log("err", error);
+    throw error;
+  }
+};
+
+Restaurant.Delete = async (restaurantId) => {
+  try {
+    const DestroyMenu = await Restaurant.destroy(
+      { where: { id: restaurantId } }
+    );
+    return DestroyMenu;
+  } catch (error) {
+    console.log("err", error);
+    throw error;
+  }
+};
+  
 
 
 module.exports = Restaurant;

@@ -4,7 +4,7 @@ const Restaurant = require("../controller/restaurant.controller");
 
 //create a new Restaurant
 // http://localhost:5000/RestaurantsShil3aiinu
-router.post("/RestaurantsShil3aiinu" ,async(req,res)=>{
+router.post("/RestaurantShil3aiinu" ,async(req,res)=>{
     try {
         const newRestaurant = req.body;
         const createRestaurant = await Restaurant.createRestaurant(newRestaurant);
@@ -14,14 +14,58 @@ router.post("/RestaurantsShil3aiinu" ,async(req,res)=>{
     }
 })
 
-router.put("/RestaurantsShil3aiinu/:id" ,async(req,res)=>{
+router.put("/RestaurantShil3aiinu/:id", async (req, res) => {
     try {
-        const updatedRestaurant = req.body;
-        const updateRestaurant = await Restaurant.updateRestaurant(updatedRestaurant);
-        res.status(201).json(updateRestaurant)
+      const restaurantId = Number.parseInt(req.params.id);
+      const newRestaurant = req.body;
+      
+      const updateResult = await Restaurant.updateRestaurant(restaurantId, newRestaurant);
+      if (updateResult[0] === 0) {
+        return res.status(404).json({ error: "Restaurant not_found" });
+      }
+      res.status(201).json({ message: "Restaurant updated successfully" });
     } catch (error) {
-        res.status(500).json({error :"Failed to create Restaurant Update"})
+      console.log(error);
+      res.status(500).json({ error: "Failed to update restaurant" });
     }
-})
+  });
 
+  router.get("/Restaurants" ,async(req,res)=>{
+    try {
+        const ShowRestaurant = await Restaurant.getAll();
+        res.status(201).json(ShowRestaurant)
+    } catch (error) {
+        res.status(500).json({error :"Failed to Show Restaurant"})
+    }
+});
+
+router.get("/Restaurants/:id", async (req, res) => {
+  try {
+    const restaurantId = Number.parseInt(req.params.id);
+    
+    const searchResult = await Restaurant.getOne(restaurantId);
+    if (searchResult[0] === 0) {
+      return res.status(404).json({ error: "Restaurant not_found" });
+    }
+    res.status(201).json(searchResult)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to Search restaurants" });
+  }
+});
+
+router.delete("/RestaurantShil3aiinu/:id", async (req, res) => {
+  try {
+    const restaurantId = Number.parseInt(req.params.id);
+    
+    const searchResult = await Restaurant.Delete(restaurantId);
+    if (searchResult[0] === 0) {
+      return res.status(404).json({ error: "Restaurant not_found" });
+    }
+    res.status(201).json({ message: "Restaurant Delete successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to Delete restaurants" });
+  }
+});
 module.exports = router;
