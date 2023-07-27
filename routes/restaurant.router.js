@@ -31,7 +31,7 @@ router.put("/RestaurantShil3aiinu/:id", async (req, res) => {
   });
 
   router.get("/Restaurants" ,async(req,res)=>{
-    try {
+    try { 
         const ShowRestaurant = await Restaurant.getAll();
         res.status(201).json(ShowRestaurant)
     } catch (error) {

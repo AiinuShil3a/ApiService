@@ -32,4 +32,11 @@ const Restaurant = sequelize.define("restaurant",{
     }
 });
 
+// create database by sequelize
+Restaurant.sync({force:false}).then(() => {
+    console.log("Table is Create");
+}).catch((error) => {
+    console.error("Error! Not create table");
+})
+
 module.exports = Restaurant;
