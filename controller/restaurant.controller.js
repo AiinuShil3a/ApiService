@@ -30,7 +30,7 @@ Restaurant.getAll = async() => {
   try {
     const restaurants = await Restaurant.findAll();
     console.log("ShowAll restaurant");
-    return restaurants
+    return restaurants.map(restaurant => restaurant.toJSON())
   } catch (error) {
       console.log("err", error);
       throw error;
@@ -39,10 +39,10 @@ Restaurant.getAll = async() => {
 
 Restaurant.getOne = async (restaurantId) => {
   try {
-    const searchByID = await Restaurant.findOne(
+    const searchByID = await Restaurant.findOne( //Or Restaurant.ByPk
       { where: { id: restaurantId } }
     );
-    return searchByID;
+    return searchByID.toJSON();
   } catch (error) {
     console.log("err", error);
     throw error;
@@ -54,6 +54,9 @@ Restaurant.Delete = async (restaurantId) => {
     const DestroyMenu = await Restaurant.destroy(
       { where: { id: restaurantId } }
     );
+    if(DestroyMenu === 0){
+      throw{kind : "not_found"}
+    }
     return DestroyMenu;
   } catch (error) {
     console.log("err", error);

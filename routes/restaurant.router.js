@@ -58,14 +58,16 @@ router.delete("/RestaurantShil3aiinu/:id", async (req, res) => {
   try {
     const restaurantId = Number.parseInt(req.params.id);
     
-    const searchResult = await Restaurant.Delete(restaurantId);
-    if (searchResult[0] === 0) {
-      return res.status(404).json({ error: "Restaurant not_found" });
-    }
-    res.status(201).json({ message: "Restaurant Delete successfully" });
+    const deleteIDResult = await Restaurant.Delete(restaurantId);
+
+    res.status(201).json({ message: "Restaurant Delete successfully Menu NO."+ restaurantId});
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Failed to Delete restaurants" });
+    if(error.kind === "not_found"){
+      res.status(404).json({ error: "Restaurants is not_found"});
+    }else{
+        console.log(error);
+        res.status(500).json({ error: "Failed to Delete restaurants" });
+      }
   }
 });
 module.exports = router;
